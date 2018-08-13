@@ -11,6 +11,8 @@ import utils
 import matplotlib.pyplot as plt
 import numpy as np
 
+#script mainly use for drawing the demo picture
+
 cal_imgs = utils.get_images_by_dir('camera_cal')
 object_points,img_points = utils.calibrate(cal_imgs,grid=(9,6))
 
