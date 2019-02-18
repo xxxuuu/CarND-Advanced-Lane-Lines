@@ -188,8 +188,14 @@ def find_line(binary_warped):
     righty = nonzeroy[right_lane_inds] 
     
     # Fit a second order polynomial to each
-    left_fit = np.polyfit(lefty, leftx, 2)
-    right_fit = np.polyfit(righty, rightx, 2)
+    left_fit = np.zeros(3)
+    right_fit = np.zeros(3)
+    try:
+        left_fit = np.polyfit(lefty, leftx, 2)
+        right_fit = np.polyfit(righty, rightx, 2)
+    except Exception as e:
+        # print(repr(e))
+        pass
     
     return left_fit, right_fit, left_lane_inds, right_lane_inds
 
@@ -212,8 +218,15 @@ def find_line_by_previous(binary_warped,left_fit,right_fit):
     rightx = nonzerox[right_lane_inds]
     righty = nonzeroy[right_lane_inds]
     # Fit a second order polynomial to each
-    left_fit = np.polyfit(lefty, leftx, 2)
-    right_fit = np.polyfit(righty, rightx, 2)
+    left_fit = np.zeros(3)
+    right_fit = np.zeros(3)
+    try:
+        left_fit = np.polyfit(lefty, leftx, 2)
+        right_fit = np.polyfit(righty, rightx, 2)
+    except Exception as e:
+        # print(repr(e))
+        pass
+
     return left_fit, right_fit, left_lane_inds, right_lane_inds
 
 def draw_area(undist,binary_warped,Minv,left_fit, right_fit):
@@ -257,9 +270,9 @@ def calculate_curv_and_pos(binary_warped,left_fit, right_fit):
     
     curvature = ((left_curverad + right_curverad) / 2)
     #print(curvature)
-    lane_width = np.absolute(leftx[719] - rightx[719])
+    lane_width = np.absolute(leftx[-1] - rightx[-1])
     lane_xm_per_pix = 3.7 / lane_width
-    veh_pos = (((leftx[719] + rightx[719]) * lane_xm_per_pix) / 2.)
+    veh_pos = (((leftx[-1] + rightx[-1]) * lane_xm_per_pix) / 2.)
     cen_pos = ((binary_warped.shape[1] * lane_xm_per_pix) / 2.)
     distance_from_center = cen_pos - veh_pos
     return curvature,distance_from_center

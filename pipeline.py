@@ -59,11 +59,25 @@ cal_imgs = utils.get_images_by_dir('camera_cal')
 object_points,img_points = utils.calibrate(cal_imgs,grid=(9,6))
 M,Minv = utils.get_M_Minv()
 
-project_outpath = 'vedio_out/project_video_out.mp4'
-project_video_clip = VideoFileClip("project_video.mp4")
+'''
+project_outpath = 'vedio_out/test2_2_out.mp4'
+project_video_clip = VideoFileClip("test2_2.mp4")
 project_video_out_clip = project_video_clip.fl_image(lambda clip: processing(clip,object_points,img_points,M,Minv,left_line,right_line))
 project_video_out_clip.write_videofile(project_outpath, audio=False)
+'''
 
+cap = cv2.VideoCapture(0)
+while(True):
+    ret, frame = cap.read()
+    if cv2.waitKey(1)==27: # ESC键
+        break
+    try:
+        cv2.imshow("capture", processing(frame,object_points,img_points,M,Minv,left_line,right_line))
+    except Exception as e:
+        print(repr(e))
+    
+cap.release()
+cv2.destroyAllWindows()
 
 ##draw the processed test image
 # test_imgs = utils.get_images_by_dir('test_images')
